@@ -5,7 +5,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from "t
 @Entity()
 export class Product {
   @PrimaryGeneratedColumn()
-  id: number;
+  id?: number;
 
   @Column({ nullable: false })
   name: string;
@@ -14,13 +14,7 @@ export class Product {
   price: number;
 
   @Column({ nullable: false, unique: true })
-  quantity: string;
-
-  @Column({ type: 'int', nullable: false })
-  category_id: number;
-
-  @Column({ type: 'int', nullable: false })
-  user_id: number;
+  quantity: number;
 
   @ManyToOne(() => User, (user) => user.Products)
   @JoinColumn({ name: 'user_id' })

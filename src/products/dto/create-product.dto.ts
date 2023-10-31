@@ -1,5 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsInt, IsNotEmpty, IsNumber, IsPositive, IsString } from "class-validator";
+import { Category } from "src/categories/entities/category.entity";
+import { User } from "src/users/entities/user.entity";
 
 export class CreateProductDto {
   @ApiProperty()
@@ -18,4 +20,10 @@ export class CreateProductDto {
   @IsInt()
   @IsPositive()
   quantity: number;
+
+  user_id: User;
+
+  category_id: Category;
+
+
 }
