@@ -14,11 +14,11 @@ export class ProductsService {
 
   async create(createProductDto: CreateProductDto) {
     console.log('SERVICE DTO:', createProductDto);
+    try {
     const product = new Product();
     product.name = createProductDto.name;
     product.price = createProductDto.price;
     product.quantity = createProductDto.quantity;
-    product.user = createProductDto.user_id;
     product.categories = createProductDto.category_id;
     console.log('PRODUCT:', product)
 
@@ -26,6 +26,9 @@ export class ProductsService {
     console.log('RESULT:', result)
 
     return result;
+    } catch (error) {
+      throw new Error('La création du produit a échoué. Veuillez réessayer.');
+    }
   }
 
   findAll() {
@@ -43,16 +46,26 @@ export class ProductsService {
   }
 
   async update(id: number, updateProductDto: UpdateProductDto) {
+    try {
     let product = await this.findOne(id);
 
     const updatedProduct = this.productsRepository.merge(product, updateProductDto);
     const result = await this.productsRepository.save(updatedProduct);
     return result;
+    } catch (error) {
+      throw new Error(
+        'La mise à jour du produit a échoué. Veuillez réessayer.',
+      );
+    }
   }
 
   async remove(id: number) {
+    try {
     const product = await this.findOne(id);
     const response = await this.productsRepository.remove(product);
     return response;
+  } catch (error) {
+        throw new Error("La suppression du produit a échoué. Veuillez réessayer.");
   }
+}
 }

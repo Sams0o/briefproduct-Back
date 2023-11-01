@@ -22,9 +22,4 @@ export class CreateUserDto {
   @IsNotEmpty()
   @Matches(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{12,}$/)
   password: string;
-
-  @ApiProperty()
-  @IsNotEmpty()
-  @IsBoolean()
-  admin: boolean;
 }

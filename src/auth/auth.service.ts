@@ -1,4 +1,9 @@
-import { ConflictException, Injectable, InternalServerErrorException, UnauthorizedException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  InternalServerErrorException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,6 +14,7 @@ import { JwtService } from '@nestjs/jwt/dist';
 
 @Injectable()
 export class AuthService {
+  
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
@@ -16,7 +22,7 @@ export class AuthService {
   ) {}
 
   async register(createAuthDto: CreateAuthDto) {
-    const { first_name, last_name, email, password, admin } = createAuthDto;
+    const { first_name, last_name, email, password} = createAuthDto;
 
     // hashage du mot de passe
     const salt = await bcrypt.genSalt();
@@ -28,7 +34,6 @@ export class AuthService {
       last_name,
       email,
       password: hashedPassword,
-      admin: false,
     });
     console.log('test sauvegarde user', user);
 
@@ -50,15 +55,16 @@ export class AuthService {
   }
 
   async login(loginDto: LoginDto) {
-     const { email, password } = loginDto;
-    const user = await this.usersRepository.findOne({where: {email: email}});
-
+    console.log('dans le service back => ' + JSON.stringify(loginDto));
+    const { email, password } = loginDto;
+    const user = await this.usersRepository.findOneBy({ email });
+    console.log('dans le service => ' + user);
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { email };
-      const accessToken = await this.jwtService.sign(payload);
+      const accessToken = this.jwtService.sign(payload);
       return { accessToken };
     } else {
-      throw new UnauthorizedException("L'authentification a échoué.");
+      console.log("L'authetification a échoué.");
     }
   }
 }

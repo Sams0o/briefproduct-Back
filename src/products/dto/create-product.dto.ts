@@ -21,8 +21,6 @@ export class CreateProductDto {
   @IsPositive()
   quantity: number;
 
-  user_id: User;
-
   category_id: Category;
 
 
